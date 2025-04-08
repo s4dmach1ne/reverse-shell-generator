@@ -436,13 +436,6 @@ const rsg = {
         const command = rsg.generateReverseShellCommand();
         const commandSelector = rsg.uiElements[rsg.commandType].command;
         document.querySelector(commandSelector).innerHTML = command;
-    },
-
-    updateSwitchStates: () => {
-        $('#listener-advanced').collapse($('#listener-advanced-switch').prop('checked') ? 'show' :
-            'hide')
-        $('#revshell-advanced').collapse($('#revshell-advanced-switch').prop('checked') ? 'show' :
-            'hide')
     }
 }
 
@@ -497,11 +490,6 @@ document.querySelector('#inc-port').addEventListener('click', () => {
         port: rsg.getPort() + 1
     })
 })
-
-document.querySelector('#listener-advanced-switch').addEventListener('change', rsg.updateSwitchStates);
-document.querySelector('#revshell-advanced-switch').addEventListener('change', rsg.updateSwitchStates);
-
-setInterval(rsg.updateSwitchStates, 500) // fix switch changes in rapid succession
 
 document.querySelector('#copy-listener').addEventListener('click', () => {
     rsg.copyToClipboard(listenerCommand.innerText)
