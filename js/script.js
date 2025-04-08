@@ -79,13 +79,6 @@ document.querySelector("#hoaxshell-tab").addEventListener("click", () => {
     });
 });
 
-var rawLinkButtons = document.querySelectorAll('.raw-listener');
-for (const button of rawLinkButtons) {
-    button.addEventListener("click", () => {
-        const rawLink = RawLink.generate(rsg);
-        window.location = rawLink;
-    });
-}
 
 const filterCommandData = function (data, { commandType, filterOperatingSystem = FilterOperatingSystemType.All, filterText = '' }) {
     return data.filter(item => {
@@ -511,28 +504,6 @@ document.querySelector('#copy-hoaxshell-command').addEventListener('click', () =
     rsg.copyToClipboard(hoaxShellCommand.innerText)
 })
 
-var downloadButton = document.querySelectorAll(".download-svg");
-for (const Dbutton of downloadButton) {
-    Dbutton.addEventListener("click", () => {
-        const filename = prompt('Enter a filename', 'payload.sh')
-        if(filename===null)return;
-        const rawLink = RawLink.generate(rsg);
-        axios({
-            url: rawLink,
-            method: 'GET',
-            responseType: 'arraybuffer',
-        })
-        .then((response)=>{
-            const url = window.URL.createObjectURL(new File([response.data], filename ));
-            const downloadElement = document.createElement("a");
-            downloadElement.href = url;
-            downloadElement.setAttribute('download', filename);
-            document.body.appendChild(downloadElement);
-            downloadElement.click();
-            document.body.removeChild(downloadElement);
-        });
-    });
-}
 
 // autoCopySwitch.addEventListener("change", () => {
 //     setLocalStorage(autoCopySwitch, "auto-copy", "checked");
