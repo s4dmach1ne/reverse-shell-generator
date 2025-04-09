@@ -2,13 +2,6 @@
       background-color: #262626 !important;
     }
 
-    .jetbrains-mono {
-      font-family: "JetBrains Mono", monospace;
-      font-optical-sizing: auto;
-      font-weight: 100;
-      font-style: normal;
-    }
-
     .prompt-sign {
       position: absolute;
       top: 25px;
@@ -57,24 +50,9 @@
       font-size: 13px;
       margin-top: 5px;
     }
+
     .custom-select {
-      background-color: #262626;
-      color: white;
-    }
-    .custom-select option:checked {
-      background-color: #a0ffa0;
-      color: black;
-    }
-    .custom-select option:hover {
-      background-color: #a0ffa0;
-      color: black;
-    }
-    .custom-select option:active {
-      background-color: #a0ffa0;
-      color: black;
-    }
-    .custom-select:focus {
-      border-color: #a0ffa0;
+      background-color: white !important;
       color: black;
     }
 
@@ -83,15 +61,34 @@
       height: 100% !important;
       margin: 20px auto;
     }
-    h2 {
+    h4 {
+      color: white;
+      font-family: JetBrains Mono;
+      text-decoration: none;
+    }
+    h5 {
+      color: white;
+      font-family: JetBrains Mono;
+      text-decoration: none;
+    }
+    a {
       color: white;
       text-align: center;
+      font-family: JetBrains Mono;
+      text-decoration: none;
     }
+    label {
+      color: white;
+      text-align: center;
+      font-family: JetBrains Mono;
+      text-decoration: none;
+    }
+
     .pre-wrap {
       white-space: pre-wrap;
     }
     .card-body {
-      max-height: 40rem;
+      max-height: auto;
     }
     .list-group-item.active, .list-group-item-action:focus, .list-group-item-action:hover {
       background-color: #a0ffa0 !important;

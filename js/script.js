@@ -320,8 +320,8 @@ const rsg = {
     },
 
     update: () => {
+        rsg.updateTabList() 
         rsg.updateListenerCommand()
-        rsg.updateTabList()
         rsg.updateReverseShellCommand()
         rsg.updateValues()
     },
@@ -348,12 +348,63 @@ const rsg = {
         searchBox.value = rsg.filterText;
     },
 
+    //     updateTabList: () => {
+    //     const data = rsgData.reverseShellCommands;
+    //     const filteredItems = filterCommandData(
+    //         data,
+    //         {
+    //             filterOperatingSystem:  rsg.filterOperatingSystem,
+    //             filterText: rsg.filterText,
+    //             commandType: rsg.commandType
+    //         }
+    //     );
+
+    //     const documentFragment = document.createDocumentFragment();
+    //     if (filteredItems.length === 0) {
+    //         const emptyMessage = document.createElement("button");
+    //         emptyMessage.innerText = "No results found";
+    //         emptyMessage.classList.add("list-group-item", "list-group-item-action", "disabled");
+
+    //         documentFragment.appendChild(emptyMessage);
+    //     }
+    //     filteredItems.forEach((item, index) => {
+    //         const {
+    //             name,
+    //             command
+    //         } = item;
+
+    //         const selectionButton = document.createElement("button");
+
+    //         if (rsg.getSelectedCommandName() === item.name) {
+    //             selectionButton.classList.add("active");
+    //         }
+
+    //         const clickEvent = () => {
+    //             rsg.selectedValues[rsg.commandType] = name;
+    //             rsg.update();
+
+    //             // if (document.querySelector('#auto-copy-switch').checked) {
+    //             //     rsg.copyToClipboard(reverseShellCommand.innerText)
+    //             // }
+    //         }
+
+    //         selectionButton.innerText = name;
+    //         selectionButton.classList.add("list-group-item", "list-group-item-action");
+    //         selectionButton.addEventListener("click", clickEvent);
+
+    //         documentFragment.appendChild(selectionButton);
+    //     })
+
+    //     const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
+    //     document.querySelector(listSelectionSelector).replaceChildren(documentFragment)
+    // },
+
     updateTabList: () => {
         const data = rsgData.reverseShellCommands;
         const filteredItems = filterCommandData(
             data,
             {
-                filterOperatingSystem:  rsg.filterOperatingSystem,
+                filterOperatingSystem: rsg.filterOperatingSystem,
                 filterText: rsg.filterText,
                 commandType: rsg.commandType
             }
@@ -364,40 +415,59 @@ const rsg = {
             const emptyMessage = document.createElement("button");
             emptyMessage.innerText = "No results found";
             emptyMessage.classList.add("list-group-item", "list-group-item-action", "disabled");
-
             documentFragment.appendChild(emptyMessage);
         }
-        filteredItems.forEach((item, index) => {
-            const {
-                name,
-                command
-            } = item;
 
-            const selectionButton = document.createElement("button");
+        filteredItems.forEach((item) => {
+            const { name, command } = item;
 
-            if (rsg.getSelectedCommandName() === item.name) {
-                selectionButton.classList.add("active");
+            // Create container for the list item
+            const container = document.createElement("div");
+            container.classList.add("list-group-item", "list-group-item-action");
+
+            // Add 'active' class if selected
+            if (rsg.getSelectedCommandName() === name) {
+                container.classList.add("active");
             }
 
-            const clickEvent = () => {
+            // Create element for the command name
+            const nameElement = document.createElement("div");
+            nameElement.textContent = name;
+            nameElement.classList.add("fw-bold", "mb-2"); // Bold and margin below
+
+            // Create pre element for the command content
+            const commandPre = document.createElement("pre");
+            commandPre.textContent = command;
+            commandPre.classList.add(
+                "bg-dark", "border", "pre-wrap", "text-break",
+                "p-4", "pl-5", "text-white", "mt-2", "rounded"
+            );
+            commandPre.style.outline = "none";
+            commandPre.style.fontSize = "1em";
+
+            // Click event handler
+            container.addEventListener("click", () => {
                 rsg.selectedValues[rsg.commandType] = name;
                 rsg.update();
 
+                // Uncomment to enable auto-copy
                 // if (document.querySelector('#auto-copy-switch').checked) {
-                //     rsg.copyToClipboard(reverseShellCommand.innerText)
+                //     rsg.copyToClipboard(command);
                 // }
-            }
+            });
 
-            selectionButton.innerText = name;
-            selectionButton.classList.add("list-group-item", "list-group-item-action");
-            selectionButton.addEventListener("click", clickEvent);
-
-            documentFragment.appendChild(selectionButton);
-        })
+            // Assemble the container
+            container.appendChild(nameElement);
+            container.appendChild(commandPre);
+            documentFragment.appendChild(container);
+        });
 
         const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
-        document.querySelector(listSelectionSelector).replaceChildren(documentFragment)
+        document.querySelector(listSelectionSelector).replaceChildren(documentFragment);
     },
+
+
+
 
     updateListenerCommand: () => {
         const privilegeWarning = document.querySelector("#port-privileges-warning");
