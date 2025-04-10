@@ -131,6 +131,10 @@
       color: white;
       border-color: transparent;
     }
+    .btn-outline-light:hover {
+      color: black;
+      border-color: transparent;
+    }
 
     .pre-wrap {
       white-space: pre-wrap;

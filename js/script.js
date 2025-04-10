@@ -569,6 +569,7 @@ document.querySelector('#copy-listener').addEventListener('click', () => {
     rsg.copyToClipboard(listenerCommand.innerText)
 })
 
+
 // document.querySelector('#copy-reverse-shell-command').addEventListener('click', () => {
 //     rsg.copyToClipboard(reverseShellCommand.innerText)
 // })
