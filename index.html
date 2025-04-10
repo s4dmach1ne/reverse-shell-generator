@@ -58,93 +58,97 @@
 
 
         <div class="row">
-            <!-- IP & Port Configuration -->
-            <div class="col-12 col-md-6 mb-4">
-                <div class="card shadow h-100">
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title mb-0">
-                            <b>Config</b>
-                        </h5>
+            <!-- Config Card -->
+             <div class="col-12 col-md-6 mb-4">
+                    <div class="card shadow h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title mb-3">
+                                <b>Config</b>
+                            </h5>
 
-                        <!-- card-text -->
-                        <div class="card-text h-100">
-                            <form class="row justify-content-center align-items-center h-100">
-
-                                <!-- IP -->
-                                <div class="col-auto mt-4">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span id="ip-label" class="input-group-text">IP</span>
+                            <div class="card-text h-100">
+                                <form class="h-100">
+                                    <!-- First Row - IP & Port -->
+                                    <div class="row g-3 mb-3">
+                                        <!-- IP -->
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">IP</span>
+                                                </div>
+                                                <input id="ip" type="text" 
+                                                    class="form-control form-control-lg text-center"
+                                                    aria-label="IP">
+                                            </div>
                                         </div>
-                                        <input id="ip" type="text" class="form-control form-control-lg text-center px-1"
-                                            size="12VW" aria-label="IP"
-                                            aria-describedby="ip-label">
+
+                                        <!-- Port -->
+                                        <div class="col-12 col-md-6">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Port</span>
+                                                </div>
+                                                <input id="port" type="text" 
+                                                    class="form-control form-control-lg text-center"
+                                                    style="min-width: 100px;"
+                                                    maxlength="5" aria-label="Port">
+                                                <div class="input-group-append">
+                                                    <button id="inc-port" class="btn btn-secondary btn-sm" 
+                                                        type="button" data-toggle="tooltip"
+                                                        title="Increase port number by one">
+                                                        +1
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Port -->
-                                <div class="col-auto mt-4">
-                                    <div class="input-group" data-toggle="tooltip">
-                                        <div class="input-group-prepend">
-                                            <span id="port-label" class="input-group-text">Port</span>
+                                    <!-- Second Row - OS, Shell, Encoding -->
+                                    <div class="row g-3">
+                                        <!-- OS Filters -->
+                                        <div class="col-12 col-md-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">OS</span>
+                                                </div>
+                                                <select id="os-options" class="custom-select">
+                                                    <option value="all">All</option>
+                                                    <option value="linux">Linux</option>
+                                                    <option value="windows">Windows</option>
+                                                    <option value="mac">Mac</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <input id="port" type="text" class="form-control form-control-lg text-center"
-                                            size="4vw" maxlength="5" aria-label="Port"
-                                            aria-describedby="port-label">
-                                        <div class="input-group-append">
-                                            <button id="inc-port" class="btn btn-secondary btn-sm" type="button"
-                                                style="font-size: 1rem" data-toggle="tooltip"
-                                                title="Increase port number by one">
-                                                +1
-                                            </button>
+
+                                        <!-- Shell Filters -->
+                                        <div class="col-12 col-md-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Shell</span>
+                                                </div>
+                                                <select id="shell" class="custom-select">
+                                                    <!-- Options filled by init() -->
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Encoding -->
+                                        <div class="col-12 col-md-4">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Enc</span>
+                                                </div>
+                                                <select id="encoding" class="custom-select">
+                                                    <option value="None">None</option>
+                                                    <option value="encodeURL">URL Encode</option>
+                                                    <option value="encodeURLDouble">Double URL Encode</option>
+                                                    <option value="Base64">Base64</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
 
-                                </div>
-
-                                <!-- OS Filters -->
-                                <div class="col-auto mt-4">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span id="os-label" class="input-group-text">OS</span>
-                                        </div>
-                                    <select id="os-options" class="custom-select">
-                                        <option class="os-item" value="all">All</option>
-                                        <option class="os-item" value="linux">Linux</option>
-                                        <option class="os-item" value="windows">Windows</option>
-                                        <option class="os-item" value="mac">Mac</option>
-                                    </select>
-                                    </div>
-                                </div>
-
-                                <!-- Shell Filters -->
-                                <div class="col-auto mt-4">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span id="shell-label" class="input-group-text">Shell</span>
-                                        </div>
-                                    <select id="shell" class="custom-select">
-                                      <!-- Options filled by init() -->
-                                    </select>
-                                    </div>
-                                </div>
-
-                                <!-- Encoding Dropdown -->
-                                <div class="col-auto mt-4">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span id="shell-label" class="input-group-text">Encoding</span>
-                                        </div>
-                                    <select id="encoding" class="custom-select">
-                                      <option value="None">None</option>
-                                      <option value="encodeURL">URL Encode</option>
-                                      <option value="encodeURLDouble">Double URL Encode</option>
-                                      <option value="Base64">Base64</option>
-                                    </select>
-                                    </div>
-                                </div>
-
-                                <div id="port-privileges-warning" class="col-12 small text-center"
+                                <div id="port-privileges-warning" class="col-12 small text-center mb-0"
                                     style="visibility: hidden">
                                     <span class="highlighted-warning">root</span>
                                     privileges required.
@@ -168,10 +172,10 @@
 
                         <div class="card-text">
                             <!-- Advanced section-->
-                            <div class="col-auto mt-4">
+                            <div style="padding-top: 3px">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span id="shell-label" class="input-group-text">Encoding</span>
+                                        <span id="shell-label" class="input-group-text">Type</span>
                                     </div>
                                  <select class="custom-select" id="listener-selection">
                                     <!-- filled by init()-->
