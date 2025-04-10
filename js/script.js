@@ -1,4 +1,3 @@
-
 // Element selectors
 const ipInput = document.querySelector("#ip");
 const portInput = document.querySelector("#port");
@@ -341,7 +340,7 @@ const rsg = {
     update: () => {
         rsg.updateTabList() 
         rsg.updateListenerCommand()
-        rsg.updateReverseShellCommand()
+        // rsg.updateReverseShellCommand()
         rsg.updateValues()
     },
 
@@ -386,7 +385,6 @@ const rsg = {
         emptyMessage.classList.add("list-group-item", "list-group-item-action", "disabled");
         documentFragment.appendChild(emptyMessage);
       }
-
 
         filteredItems.forEach((item) => {
           const { name, command } = item;
@@ -509,11 +507,11 @@ const rsg = {
     //     selectedElement?.classList.add("active");
     // },
 
-    updateReverseShellCommand: () => {
-        const command = rsg.generateReverseShellCommand();
-        const commandSelector = rsg.uiElements[rsg.commandType].command;
-        document.querySelector(commandSelector).innerHTML = command;
-    }
+    // updateReverseShellCommand: () => {
+    //     const command = rsg.generateReverseShellCommand();
+    //     const commandSelector = rsg.uiElements[rsg.commandType].command;
+    //     document.querySelector(commandSelector).innerHTML = command;
+    // }
 }
 
 /*
@@ -576,17 +574,17 @@ document.querySelector('#copy-listener').addEventListener('click', () => {
 //     rsg.copyToClipboard(reverseShellCommand.innerText)
 // })
 
-document.querySelector('#copy-bind-shell-command').addEventListener('click', () => {
-    rsg.copyToClipboard(bindShellCommand.innerText)
-})
+// document.querySelector('#copy-bind-shell-command').addEventListener('click', () => {
+//     rsg.copyToClipboard(bindShellCommand.innerText)
+// })
 
-document.querySelector('#copy-msfvenom-command').addEventListener('click', () => {
-    rsg.copyToClipboard(msfVenomCommand.innerText)
-})
+// document.querySelector('#copy-msfvenom-command').addEventListener('click', () => {
+//     rsg.copyToClipboard(msfVenomCommand.innerText)
+// })
 
-document.querySelector('#copy-hoaxshell-command').addEventListener('click', () => {
-    rsg.copyToClipboard(hoaxShellCommand.innerText)
-})
+// document.querySelector('#copy-hoaxshell-command').addEventListener('click', () => {
+//     rsg.copyToClipboard(hoaxShellCommand.innerText)
+// })
 
 
 // autoCopySwitch.addEventListener("change", () => {
