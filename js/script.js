@@ -368,76 +368,6 @@ const rsg = {
         searchBox.value = rsg.filterText;
     },
 
-    // updateTabList: () => {
-    //     const data = rsgData.reverseShellCommands;
-    //     const filteredItems = filterCommandData(
-    //         data,
-    //         {
-    //             filterOperatingSystem: rsg.filterOperatingSystem,
-    //             filterText: rsg.filterText,
-    //             commandType: rsg.commandType
-    //         }
-    //     );
-        
-
-    //     const documentFragment = document.createDocumentFragment();
-    //     if (filteredItems.length === 0) {
-    //         const emptyMessage = document.createElement("button");
-    //         emptyMessage.innerText = "No results found";
-    //         emptyMessage.classList.add("list-group-item", "list-group-item-action", "disabled");
-    //         documentFragment.appendChild(emptyMessage);
-    //     }
-
-    //     filteredItems.forEach((item) => {
-    //         const { name, command } = item;
-
-
-    //         // Create container for the list item
-    //         const container = document.createElement("div");
-    //         container.classList.add("list-group-item", "list-group-item-action");
-
-    //         // Add 'active' class if selected
-    //         if (rsg.getSelectedCommandName() === name) {
-    //             container.classList.add("active");
-    //         }
-
-    //         // Create element for the command name
-    //         const nameElement = document.createElement("div");
-    //         nameElement.textContent = name;
-    //         nameElement.classList.add("fw-bold", "mb-2"); // Bold and margin below
-
-    //         // Create pre element for the command content
-    //         const commandPre = document.createElement("pre");
-    //         commandPre.textContent = command;
-    //         commandPre.classList.add(
-    //             "bg-dark", "border", "pre-wrap", "text-break",
-    //             "p-4", "pl-5", "text-white", "mt-2", "rounded"
-    //         );
-    //         commandPre.style.outline = "none";
-    //         commandPre.style.fontSize = "1em";
-
-
-    //         // Click event handler
-    //         container.addEventListener("click", () => {
-    //             rsg.selectedValues[rsg.commandType] = name;
-    //             rsg.update();
-
-    //             // Uncomment to enable auto-copy
-    //             // if (document.querySelector('#auto-copy-switch').checked) {
-    //             //     rsg.copyToClipboard(command);
-    //             // }
-    //         });
-
-    //         // Assemble the container
-    //         container.appendChild(nameElement);
-    //         container.appendChild(commandPre);
-    //         documentFragment.appendChild(container);
-    //     });
-
-    //     const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
-    //     document.querySelector(listSelectionSelector).replaceChildren(documentFragment);
-    // },
-
 
     updateTabList: () => {
       const data = rsgData.reverseShellCommands;
@@ -458,60 +388,62 @@ const rsg = {
         documentFragment.appendChild(emptyMessage);
       }
 
-      filteredItems.forEach((item) => {
-        const { name, command } = item;
-        if (!command) {
-          // skip or provide a fallback
-          return;
-        }
 
-        const container = document.createElement("div");
-        container.classList.add("list-group-item", "list-group-item-action");
+        filteredItems.forEach((item) => {
+            const { name, command } = item;
+            if (!command) return;
 
+            const container = document.createElement("div");
+            container.classList.add("list-group-item", "list-group-item-action");
 
+            // Create header wrapper ONCE
+            const headerWrapper = document.createElement("div");
+            headerWrapper.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
 
+            // Command name label
+            const nameElement = document.createElement("div");
+            nameElement.textContent = name;
+            nameElement.classList.add("fw-bold");
 
-        // Highlight the currently selected command
-        if (rsg.getSelectedCommandName() === name) {
-          container.classList.add("active");
-        }
+            // Copy button
+            const copyButton = document.createElement("button");
+            copyButton.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>';
+            copyButton.classList.add("btn", "btn-sm", "btn-outline-light");
+            copyButton.setAttribute("title", "Copy to clipboard");
 
-        // Command name label
-        const nameElement = document.createElement("div");
-        nameElement.textContent = name;
-        nameElement.classList.add("fw-bold", "mb-2");
+            // Create <pre> element FIRST
+            const commandPre = document.createElement("pre");
+            commandPre.classList.add(
+                "bg-dark", "border", "pre-wrap", "text-break",
+                "p-4", "pl-5", "text-white", "mt-2", "rounded", "reverse-shell-command"
+            );
 
-        // Create <pre> to display the command
-        const commandPre = document.createElement("pre");
-        commandPre.classList.add(
-          "bg-dark", "border", "pre-wrap", "text-break",
-          "p-4", "pl-5", "text-white", "mt-2", "rounded", "reverse-shell-command"
-        );
+            // Setup copy handler AFTER commandPre is defined
+            copyButton.addEventListener("click", () => {
+                const textToCopy = commandPre.innerText
+                    .replace(/&lt;/g, "<")
+                    .replace(/&gt;/g, ">")
+                    .replace(/&amp;/g, "&");
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    copyButton.classList.add("btn-success");
+                    setTimeout(() => copyButton.classList.remove("btn-success"), 1000);
+                });
+            });
 
-        // 1) Insert IP/port/shell placeholders
-        // 2) Convert to HTML with highlightParameters
-        // 3) Finally set .innerHTML = ...
-        // let replaced = rsg.insertParameters(command, (x) => x); // or an encoder if needed
-        // highlighted = rsg.highlightParameters(replaced);
-        // console.log(highlighted);
+            // Populate commandPre
+            let replaced = rsg.insertParameters(command, (x) => x);
+            let sanitized = escapeHtml(replaced);
+            let highlighted = rsg.highlightParameters(sanitized);
+            commandPre.innerHTML = highlighted;
 
-        let replaced = rsg.insertParameters(command, (x) => x);
-        let sanitized = escapeHtml(replaced);
-        let highlighted = rsg.highlightParameters(sanitized);
-        console.log(highlighted);
+            // Assemble elements
+            headerWrapper.appendChild(nameElement);
+            headerWrapper.appendChild(copyButton);
+            container.appendChild(headerWrapper);
+            container.appendChild(commandPre); // Removed duplicate nameElement append
 
-
-        commandPre.innerHTML = highlighted;
-
-        // When user clicks a command in the list
-        container.addEventListener("click", () => {
-          rsg.selectedValues[rsg.commandType] = name;
-          rsg.update();
-        });
-
-        container.appendChild(nameElement);
-        container.appendChild(commandPre);
-        documentFragment.appendChild(container);
+            documentFragment.appendChild(container);
       });
 
       const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
@@ -539,12 +471,12 @@ const rsg = {
         listenerCommand.innerHTML = command;
     },
 
-    updateReverseShellSelection: () => {
-        document.querySelector(".list-group-item.active") ?.classList.remove("active");
-        const elements = Array.from(document.querySelectorAll(".list-group-item"));
-        const selectedElement = elements.find((item) => item.innerText === rsg.currentCommandName);
-        selectedElement?.classList.add("active");
-    },
+    // updateReverseShellSelection: () => {
+    //     document.querySelector(".list-group-item.active") ?.classList.remove("active");
+    //     const elements = Array.from(document.querySelectorAll(".list-group-item"));
+    //     const selectedElement = elements.find((item) => item.innerText === rsg.currentCommandName);
+    //     selectedElement?.classList.add("active");
+    // },
 
     updateReverseShellCommand: () => {
         const command = rsg.generateReverseShellCommand();
