@@ -34,6 +34,14 @@ const hoaxshell_listener_types = {
 	"PowerShell Outfile Constr Lang Mode https" : "ps-outfile-cm -c /your/cert.pem -k /your/key.pem"
 };
 
+// new
+function escapeHtml(text) {
+    return text.replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+}
+
+
 operatingSystemSelect.addEventListener("change", (event) => {
     const selectedOS = event.target.value;
     rsg.setState({
@@ -263,8 +271,20 @@ const rsg = {
         parameters.forEach((param) => {
             if (encoder) param = encoder(param)
             text = text.replace(param, `<span class="highlighted-parameter">${param}</span>`)
+
+            .replaceAll(rsg.getIP(), `<span class="highlighted-parameter">${rsg.getIP()}</span>`)
+            .replaceAll(String(rsg.getPort()), `<span class="highlighted-parameter">${rsg.getPort()}</span>`)
+            .replaceAll(
+              new RegExp(`${rsg.getShell().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g'
+            ), 
+            `<span class="highlighted-parameter">${rsg.getShell()}</span>`
+            );
+
+
+
         })
         return text
+        
     },
 
     init: () => {
@@ -348,124 +368,155 @@ const rsg = {
         searchBox.value = rsg.filterText;
     },
 
-    //     updateTabList: () => {
+    // updateTabList: () => {
     //     const data = rsgData.reverseShellCommands;
     //     const filteredItems = filterCommandData(
     //         data,
     //         {
-    //             filterOperatingSystem:  rsg.filterOperatingSystem,
+    //             filterOperatingSystem: rsg.filterOperatingSystem,
     //             filterText: rsg.filterText,
     //             commandType: rsg.commandType
     //         }
     //     );
+        
 
     //     const documentFragment = document.createDocumentFragment();
     //     if (filteredItems.length === 0) {
     //         const emptyMessage = document.createElement("button");
     //         emptyMessage.innerText = "No results found";
     //         emptyMessage.classList.add("list-group-item", "list-group-item-action", "disabled");
-
     //         documentFragment.appendChild(emptyMessage);
     //     }
-    //     filteredItems.forEach((item, index) => {
-    //         const {
-    //             name,
-    //             command
-    //         } = item;
 
-    //         const selectionButton = document.createElement("button");
+    //     filteredItems.forEach((item) => {
+    //         const { name, command } = item;
 
-    //         if (rsg.getSelectedCommandName() === item.name) {
-    //             selectionButton.classList.add("active");
+
+    //         // Create container for the list item
+    //         const container = document.createElement("div");
+    //         container.classList.add("list-group-item", "list-group-item-action");
+
+    //         // Add 'active' class if selected
+    //         if (rsg.getSelectedCommandName() === name) {
+    //             container.classList.add("active");
     //         }
 
-    //         const clickEvent = () => {
+    //         // Create element for the command name
+    //         const nameElement = document.createElement("div");
+    //         nameElement.textContent = name;
+    //         nameElement.classList.add("fw-bold", "mb-2"); // Bold and margin below
+
+    //         // Create pre element for the command content
+    //         const commandPre = document.createElement("pre");
+    //         commandPre.textContent = command;
+    //         commandPre.classList.add(
+    //             "bg-dark", "border", "pre-wrap", "text-break",
+    //             "p-4", "pl-5", "text-white", "mt-2", "rounded"
+    //         );
+    //         commandPre.style.outline = "none";
+    //         commandPre.style.fontSize = "1em";
+
+
+    //         // Click event handler
+    //         container.addEventListener("click", () => {
     //             rsg.selectedValues[rsg.commandType] = name;
     //             rsg.update();
 
+    //             // Uncomment to enable auto-copy
     //             // if (document.querySelector('#auto-copy-switch').checked) {
-    //             //     rsg.copyToClipboard(reverseShellCommand.innerText)
+    //             //     rsg.copyToClipboard(command);
     //             // }
-    //         }
+    //         });
 
-    //         selectionButton.innerText = name;
-    //         selectionButton.classList.add("list-group-item", "list-group-item-action");
-    //         selectionButton.addEventListener("click", clickEvent);
-
-    //         documentFragment.appendChild(selectionButton);
-    //     })
+    //         // Assemble the container
+    //         container.appendChild(nameElement);
+    //         container.appendChild(commandPre);
+    //         documentFragment.appendChild(container);
+    //     });
 
     //     const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
-    //     document.querySelector(listSelectionSelector).replaceChildren(documentFragment)
+    //     document.querySelector(listSelectionSelector).replaceChildren(documentFragment);
     // },
 
-    updateTabList: () => {
-        const data = rsgData.reverseShellCommands;
-        const filteredItems = filterCommandData(
-            data,
-            {
-                filterOperatingSystem: rsg.filterOperatingSystem,
-                filterText: rsg.filterText,
-                commandType: rsg.commandType
-            }
-        );
 
-        const documentFragment = document.createDocumentFragment();
-        if (filteredItems.length === 0) {
-            const emptyMessage = document.createElement("button");
-            emptyMessage.innerText = "No results found";
-            emptyMessage.classList.add("list-group-item", "list-group-item-action", "disabled");
-            documentFragment.appendChild(emptyMessage);
+    updateTabList: () => {
+      const data = rsgData.reverseShellCommands;
+      const filteredItems = filterCommandData(
+        data,
+        {
+          filterOperatingSystem: rsg.filterOperatingSystem,
+          filterText: rsg.filterText,
+          commandType: rsg.commandType
+        }
+      );
+
+      const documentFragment = document.createDocumentFragment();
+      if (filteredItems.length === 0) {
+        const emptyMessage = document.createElement("button");
+        emptyMessage.innerText = "No results found";
+        emptyMessage.classList.add("list-group-item", "list-group-item-action", "disabled");
+        documentFragment.appendChild(emptyMessage);
+      }
+
+      filteredItems.forEach((item) => {
+        const { name, command } = item;
+        if (!command) {
+          // skip or provide a fallback
+          return;
         }
 
-        filteredItems.forEach((item) => {
-            const { name, command } = item;
+        const container = document.createElement("div");
+        container.classList.add("list-group-item", "list-group-item-action");
 
-            // Create container for the list item
-            const container = document.createElement("div");
-            container.classList.add("list-group-item", "list-group-item-action");
 
-            // Add 'active' class if selected
-            if (rsg.getSelectedCommandName() === name) {
-                container.classList.add("active");
-            }
 
-            // Create element for the command name
-            const nameElement = document.createElement("div");
-            nameElement.textContent = name;
-            nameElement.classList.add("fw-bold", "mb-2"); // Bold and margin below
 
-            // Create pre element for the command content
-            const commandPre = document.createElement("pre");
-            commandPre.textContent = command;
-            commandPre.classList.add(
-                "bg-dark", "border", "pre-wrap", "text-break",
-                "p-4", "pl-5", "text-white", "mt-2", "rounded"
-            );
-            commandPre.style.outline = "none";
-            commandPre.style.fontSize = "1em";
+        // Highlight the currently selected command
+        if (rsg.getSelectedCommandName() === name) {
+          container.classList.add("active");
+        }
 
-            // Click event handler
-            container.addEventListener("click", () => {
-                rsg.selectedValues[rsg.commandType] = name;
-                rsg.update();
+        // Command name label
+        const nameElement = document.createElement("div");
+        nameElement.textContent = name;
+        nameElement.classList.add("fw-bold", "mb-2");
 
-                // Uncomment to enable auto-copy
-                // if (document.querySelector('#auto-copy-switch').checked) {
-                //     rsg.copyToClipboard(command);
-                // }
-            });
+        // Create <pre> to display the command
+        const commandPre = document.createElement("pre");
+        commandPre.classList.add(
+          "bg-dark", "border", "pre-wrap", "text-break",
+          "p-4", "pl-5", "text-white", "mt-2", "rounded", "reverse-shell-command"
+        );
 
-            // Assemble the container
-            container.appendChild(nameElement);
-            container.appendChild(commandPre);
-            documentFragment.appendChild(container);
+        // 1) Insert IP/port/shell placeholders
+        // 2) Convert to HTML with highlightParameters
+        // 3) Finally set .innerHTML = ...
+        // let replaced = rsg.insertParameters(command, (x) => x); // or an encoder if needed
+        // highlighted = rsg.highlightParameters(replaced);
+        // console.log(highlighted);
+
+        let replaced = rsg.insertParameters(command, (x) => x);
+        let sanitized = escapeHtml(replaced);
+        let highlighted = rsg.highlightParameters(sanitized);
+        console.log(highlighted);
+
+
+        commandPre.innerHTML = highlighted;
+
+        // When user clicks a command in the list
+        container.addEventListener("click", () => {
+          rsg.selectedValues[rsg.commandType] = name;
+          rsg.update();
         });
 
-        const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
-        document.querySelector(listSelectionSelector).replaceChildren(documentFragment);
-    },
+        container.appendChild(nameElement);
+        container.appendChild(commandPre);
+        documentFragment.appendChild(container);
+      });
 
+      const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
+      document.querySelector(listSelectionSelector).replaceChildren(documentFragment);
+    },
 
 
 
