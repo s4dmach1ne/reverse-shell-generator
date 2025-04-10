@@ -91,11 +91,8 @@
       max-height: auto;
     }
     .list-group-item.active, .list-group-item-action:focus, .list-group-item-action:hover {
-      background-color: #a0ffa0 !important;
-      color: black !important;
-    }
-    .github-corner:hover .octo-arm {
-      animation: octocat-wave 560ms ease-in-out;
+      background-color: #262626 !important;
+      color: white !important;
     }
     .download-svg {
       height: 20px;
@@ -110,11 +107,6 @@
       20%, 60% { transform: rotate(-25deg); }
       40%, 80% { transform: rotate(10deg); }
     }
-    @media (max-width:500px) {
-      .github-corner:hover .octo-arm { animation: none; }
-      .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out; }
-    }
-    button { outline: none; }
     .shadow { margin-bottom: 0px !important; }
     .middle-card {
       min-height: 500px; 
