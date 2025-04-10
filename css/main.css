@@ -121,12 +121,21 @@
       font-family: JetBrains Mono;
       text-decoration: none;
     }
+    .namecmd {
+      color: white;
+      font-size: 20px;
+      font-family: JetBrains Mono;
+      text-decoration: none;
+    }
 
     .pre-wrap {
       white-space: pre-wrap;
     }
     .card-body {
       max-height: auto;
+    }
+    .list-group-item {
+      border: 0.5rm solid white;
     }
     .list-group-item.active, .list-group-item-action:focus, .list-group-item-action:hover {
       background-color: #262626 !important;
