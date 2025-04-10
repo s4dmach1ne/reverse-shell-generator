@@ -45,12 +45,11 @@
     </style>
 </head>
 
-<body class="bg-black">
-    <!-- <div class="container d-flex flex-column vh-100"> -->
-    <div class="container-fluid d-flex flex-column vh-100" style="max-width: 73%;">
+<body class="bg-black d-flex flex-column min-vh-100">
+    <div class="container-fluid flex-grow-1 py-4" style="max-width: 73%;">
 
         <!-- Header -->
-        <div class="mb-auto row justify-content-left" style="padding-top:35px;">
+        <div class="mb-auto row justify-content-left" style="padding-top:14px;">
             <h4><b><a class="title" href="https://reynaldo.biz.id" style="padding-left:20px; padding-right:10px;">
                 whichshell
             </a></b></h4>
@@ -62,9 +61,9 @@
             <!-- IP & Port Configuration -->
             <div class="col-12 col-md-6 mb-4">
                 <div class="card shadow h-100">
-                    <div class="card-body">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title mb-0">
-                            <b>IP & Port</b>
+                            <b>Config</b>
                         </h5>
 
                         <!-- card-text -->
@@ -100,6 +99,49 @@
                                             </button>
                                         </div>
                                     </div>
+
+                                </div>
+
+                                <!-- OS Filters -->
+                                <div class="col-auto mt-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span id="os-label" class="input-group-text">OS</span>
+                                        </div>
+                                    <select id="os-options" class="custom-select">
+                                        <option class="os-item" value="all">All</option>
+                                        <option class="os-item" value="linux">Linux</option>
+                                        <option class="os-item" value="windows">Windows</option>
+                                        <option class="os-item" value="mac">Mac</option>
+                                    </select>
+                                    </div>
+                                </div>
+
+                                <!-- Shell Filters -->
+                                <div class="col-auto mt-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span id="shell-label" class="input-group-text">Shell</span>
+                                        </div>
+                                    <select id="shell" class="custom-select">
+                                      <!-- Options filled by init() -->
+                                    </select>
+                                    </div>
+                                </div>
+
+                                <!-- Encoding Dropdown -->
+                                <div class="col-auto mt-4">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span id="shell-label" class="input-group-text">Encoding</span>
+                                        </div>
+                                    <select id="encoding" class="custom-select">
+                                      <option value="None">None</option>
+                                      <option value="encodeURL">URL Encode</option>
+                                      <option value="encodeURLDouble">Double URL Encode</option>
+                                      <option value="Base64">Base64</option>
+                                    </select>
+                                    </div>
                                 </div>
 
                                 <div id="port-privileges-warning" class="col-12 small text-center"
@@ -125,34 +167,29 @@
                         <h5 class="card-title"><b>Listener</b></h5>
 
                         <div class="card-text">
-
-                            <!-- Command -->
-                            <div class="row justify-content-center">
-                                <div class="col-auto position-relative" style="min-width: 15vw">
-                                    <pre class="prompt-sign">></pre>
-                                    <pre id="listener-command" class="bg-dark border text-wrap text-break p-4 pl-5 mb-2" spellcheck="false"
-                                        style="outline: none; font-size:1em;" contenteditable="true"></pre>
+                            <!-- Advanced section-->
+                            <div class="col-auto mt-4">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span id="shell-label" class="input-group-text">Encoding</span>
+                                    </div>
+                                 <select class="custom-select" id="listener-selection">
+                                    <!-- filled by init()-->
+                                </select>
+                                <!-- Copy button -->
+                                <button id="copy-listener" class="btn btn-sm btn-outline-light" title="Copy to clipboard"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg></button>
                                 </div>
                             </div>
 
-                            <!-- Advanced section-->
-                            <form class="row justify-content-center" id="listener-advanced">
-                                <label for="listener-selection" class="col-auto col-form-label">Type</label>
-                                <div class="col-auto">
-                                    <select class="custom-select" id="listener-selection">
-                                        <!-- filled by init()-->
-                                    </select>
+                            <!-- Command -->
+                            <div class="row justify-content-left">
+                                <div class="col-auto position-relative" style="min-width: 15vw">
+                                    <pre class="prompt-sign">></pre>
+                                    <pre id="listener-command" class="shadow-none border text-wrap text-break p-4 pl-5 mb-2" spellcheck="false"
+                                        style="background-color: transparent; outline: none; font-size:1em;" contenteditable="true"></pre>
                                 </div>
-                            </form>
-
-                        </div>
-                        <!-- /card-text -->
-
-                        <!-- Copy button -->
-                        <button id="copy-listener" type="button" class="btn btn-primary float-right"
-                            data-toggle="tooltip" title="Copy to clipboard">
-                            Copy
-                        </button>
+                            </div>
+                        </div>                      
                     </div>
                 </div>
             </div>
@@ -183,57 +220,30 @@
             </li> -->
         </ul>
 
-        <div class="card shadow mb-5">
-            <div class="card-body">
+        <div class="card shadow h-100">
+            <div class="card-body d-flex flex-column" style="min-height: 600px;">
                 <!-- Top configuration bar -->
-                <div class="d-md-flex">
+                <div class="d-md-flex mb-3">
                     <!---Filters-->
-                    <label for="os-options" class="col-auto col-form-label"
-                        style="font-size:1rem; padding-right: 20px;">OS</label>
-                    <div class="col-auto">
-                        <select id="os-options" class="custom-select">
-                            <option class="os-item" value="all">All</option>
-                            <option class="os-item" value="linux">Linux</option>
-                            <option class="os-item" value="windows">Windows</option>
-                            <option class="os-item" value="mac">Mac</option>
-                        </select>
-                    </div>
-                <!-- Shell Dropdown -->
-                    <label for="shell" class="col-auto col-form-label" style="font-size:1rem">Shell</label>
-                    <div class="col-auto">
-                        <select id="shell" class="custom-select">
-                          <!-- Options filled by init() -->
-                        </select>
-                    </div>
 
-                    <!-- Encoding Dropdown -->
-                    <label for="encoding" class="col-auto col-form-label" style="font-size:1rem">Encoding</label>
-                    <div class="col-auto">
-                        <select id="encoding" class="custom-select">
-                          <option value="None">None</option>
-                          <option value="encodeURL">URL Encode</option>
-                          <option value="encodeURLDouble">Double URL Encode</option>
-                          <option value="Base64">Base64</option>
-                        </select>
-                    </div>
 
                     <!---/Filters-->
                 </div>
-                <div class="d-md-flex" style="padding-top: 10px;">
+                <div class="d-md-flex">
                     <label for="name" class="col-auto col-form-label" style="font-size:1rem">Name</label>
                     <input type="text" id="searchBox" placeholder="Search..." class="form-control form-control-md text-left">
                 </div>
 
 
-                <div class="tab-content">
+                <div class="tab-content flex-grow-1">
                     <!-- Reverse Shell Tab-->
 
 
                     </div>
 
-                    <div class="tab-pane active" id="reverse" role="tabpanel" aria-labelledby="reverse-tab">
+                    <div class="tab-pane active h-100" id="reverse" role="tabpanel" aria-labelledby="reverse-tab">
                         <div class="card-text mt-4">
-                            <div class="row">
+                            <div class="row flex-grow-1">
 
                             <!-- Reverse shell selection -->
                                 <div class="col-auto flex-grow-1">

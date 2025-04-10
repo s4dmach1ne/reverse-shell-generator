@@ -1,6 +1,44 @@
     body {
       background-color: #262626 !important;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
+
+
+    .container-fluid {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0; /* Add this */
+    }
+
+    .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0; /* Add this */
+    }
+
+    .card-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0; /* Add this */
+      padding: 1.5rem;
+    }
+
+    .tab-content > .tab-pane {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reverse-shell-command {
+        overflow: visible !important;
+    }
+
 
     .prompt-sign {
       position: absolute;
@@ -110,8 +148,7 @@
     .shadow { margin-bottom: 0px !important; }
     .middle-card {
       min-height: 500px; 
-      max-height: 100%; 
-      overflow-y: auto; 
+      height: 100%; /* Change from max-height */
       padding: 1.5rem; 
     }
 
@@ -123,4 +160,9 @@
     .btn-success {
       background-color: #a0ffa0 !important;
       color: black !important;
+    }
+
+    .reverse-shell-command pre {
+      flex: 1;
+      min-height: 0;
     }
