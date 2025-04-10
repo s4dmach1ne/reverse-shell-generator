@@ -259,7 +259,6 @@ const rsg = {
             // NOTE: Assumes encoder doesn't produce HTML-escaped characters in parameters
             command = rsg.insertParameters(rsg.highlightParameters(command, encoder), encoder);
         }
-
         return command;
     },
 
@@ -390,60 +389,92 @@ const rsg = {
 
 
         filteredItems.forEach((item) => {
-            const { name, command } = item;
-            if (!command) return;
+          const { name, command } = item;
+          if (!command) return;
 
-            const container = document.createElement("div");
-            container.classList.add("list-group-item", "list-group-item-action");
+          const container = document.createElement("div");
+          container.classList.add("list-group-item", "list-group-item-action");
 
-            // Create header wrapper ONCE
-            const headerWrapper = document.createElement("div");
-            headerWrapper.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
+          // Header bar with Name + Copy button
+          const headerWrapper = document.createElement("div");
+          headerWrapper.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2");
 
-            // Command name label
-            const nameElement = document.createElement("div");
-            nameElement.textContent = name;
-            nameElement.classList.add("fw-bold");
+          const nameElement = document.createElement("div");
+          nameElement.textContent = name;
+          nameElement.classList.add("fw-bold");
 
-            // Copy button
-            const copyButton = document.createElement("button");
-            copyButton.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>';
-            copyButton.classList.add("btn", "btn-sm", "btn-outline-light");
-            copyButton.setAttribute("title", "Copy to clipboard");
+          const copyButton = document.createElement("button");
+          copyButton.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-xs"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>';          copyButton.classList.add("btn", "btn-sm", "btn-outline-light");
+          copyButton.setAttribute("title", "Copy to clipboard");
 
-            // Create <pre> element FIRST
-            const commandPre = document.createElement("pre");
-            commandPre.classList.add(
-                "bg-dark", "border", "pre-wrap", "text-break",
-                "p-4", "pl-5", "text-white", "mt-2", "rounded", "reverse-shell-command"
+          // Pre block that shows the final command
+          const commandPre = document.createElement("pre");
+          commandPre.classList.add(
+            "bg-dark", "border", "pre-wrap", "text-break",
+            "p-4", "pl-5", "text-white", "mt-2", "rounded", "reverse-shell-command"
+          );
+
+          // The main encoding + highlighting logic:
+          let highlighted;
+          const encoding = rsg.getEncoding();
+
+          if (encoding === 'Base64') {
+            // 1) First insert parameters so placeholders are replaced with actual IP/port/shell
+            let inserted = rsg.insertParameters(command, text => text);
+            // 2) Base64-encode the entire command
+            highlighted = btoa(inserted);
+
+            // If you prefer to show raw base64 text (no HTML inside), just do:
+            // commandPre.textContent = highlighted;
+            // return;
+          } else {
+            // For encodeURL or encodeURLDouble
+            function encoder(str) {
+              let result = str;
+              switch (encoding) {
+                case 'encodeURLDouble':
+                  result = fixedEncodeURIComponent(result);
+                  // fall through
+                case 'encodeURL':
+                  result = fixedEncodeURIComponent(result);
+                  break;
+              }
+              return result;
+            }
+
+            // 1) Encode the raw command text (this may still include {ip},{port},{shell})
+            let encoded = encoder(command);
+            // 2) Escape HTML special chars so it doesn't break your <pre>
+            let escaped = rsg.escapeHTML(encoded);
+            // 3) Insert the placeholders (with highlighting) after encoding
+            //    so your placeholders become <span> if you want them highlighted
+            highlighted = rsg.insertParameters(
+              rsg.highlightParameters(escaped, encoder),
+              encoder
             );
+          }
 
-            // Setup copy handler AFTER commandPre is defined
-            copyButton.addEventListener("click", () => {
-                const textToCopy = commandPre.innerText
-                    .replace(/&lt;/g, "<")
-                    .replace(/&gt;/g, ">")
-                    .replace(/&amp;/g, "&");
-                
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    copyButton.classList.add("btn-success");
-                    setTimeout(() => copyButton.classList.remove("btn-success"), 1000);
-                });
+          // Put final text into the <pre> (for non-Base64 encoding, we have HTML markup)
+          commandPre.innerHTML = highlighted;
+
+          // Copy button: copies the plain text version (no HTML tags)
+          copyButton.addEventListener("click", () => {
+            const textToCopy = commandPre.innerText
+              .replace(/&lt;/g, "<")
+              .replace(/&gt;/g, ">")
+              .replace(/&amp;/g, "&");
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+              copyButton.classList.add("btn-success");
+              setTimeout(() => copyButton.classList.remove("btn-success"), 1000);
             });
+          });
 
-            // Populate commandPre
-            let replaced = rsg.insertParameters(command, (x) => x);
-            let sanitized = escapeHtml(replaced);
-            let highlighted = rsg.highlightParameters(sanitized);
-            commandPre.innerHTML = highlighted;
-
-            // Assemble elements
-            headerWrapper.appendChild(nameElement);
-            headerWrapper.appendChild(copyButton);
-            container.appendChild(headerWrapper);
-            container.appendChild(commandPre); // Removed duplicate nameElement append
-
-            documentFragment.appendChild(container);
+          headerWrapper.appendChild(nameElement);
+          headerWrapper.appendChild(copyButton);
+          container.appendChild(headerWrapper);
+          container.appendChild(commandPre);
+          documentFragment.appendChild(container);
       });
 
       const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
