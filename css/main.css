@@ -10,7 +10,7 @@
       font-size: 1em;
     }
     .highlighted-parameter {
-      color: #72c372;
+      color: #a0ffa0;
       font-weight: bold;
       font-size: 1em;
     }
@@ -119,4 +119,8 @@
       background-color: #a0ffa0 !important;
       border-color: #a0ffa0 !important;
       color: black;
+    }
+    .btn-success {
+      background-color: #a0ffa0 !important;
+      color: black !important;
     }
