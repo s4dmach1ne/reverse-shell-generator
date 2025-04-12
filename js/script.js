@@ -451,9 +451,7 @@ const rsg = {
             }
           }
 
-          // Put final text into the <pre> (for non-Base64 encoding, we have HTML markup)
-        console.log(highlighted);
-
+          
           commandPre.innerHTML = highlighted;
 
           // Copy button: copies the plain text version (no HTML tags)
