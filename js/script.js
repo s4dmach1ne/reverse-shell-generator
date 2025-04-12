@@ -49,43 +49,20 @@ operatingSystemSelect.addEventListener("change", (event) => {
 });
 
 document.querySelector("#reverse-tab").addEventListener("click", () => {
-    rsg.setState({
-        commandType: CommandType.ReverseShell,
-    });
-})
-
-document.querySelector("#bind-tab").addEventListener("click", () => {
-    rsg.setState({
-        commandType: CommandType.BindShell,
-        encoding: "None"
+    rsg.setState({ commandType: CommandType.ReverseShell });
 });
-})
 
 document.querySelector("#bind-tab").addEventListener("click", () => {
-    document.querySelector("#bind-shell-selection").innerHTML = "";
-    rsg.setState({
-        commandType: CommandType.BindShell
-
-    });
-})
+    rsg.setState({ commandType: CommandType.BindShell });
+});
 
 document.querySelector("#msfvenom-tab").addEventListener("click", () => {
-    document.querySelector("#msfvenom-selection").innerHTML = "";
-    rsg.setState({
-        commandType: CommandType.MSFVenom,
-encoding: "None"
-    });
+    rsg.setState({ commandType: CommandType.MSFVenom });
 });
-
 
 document.querySelector("#hoaxshell-tab").addEventListener("click", () => {
-    document.querySelector("#hoaxshell-selection").innerHTML = "";
-    rsg.setState({
-        commandType: CommandType.HoaxShell,
-		encoding: "None"
-    });
+    rsg.setState({ commandType: CommandType.HoaxShell });
 });
-
 
 const filterCommandData = function (data, { commandType, filterOperatingSystem = FilterOperatingSystemType.All, filterText = '' }) {
     return data.filter(item => {
@@ -135,24 +112,30 @@ const rsg = {
     filterOperatingSystem: query.get('filterOperatingSystem') || localStorage.getItem('filterOperatingSystem') || FilterOperatingSystemType.All,
     filterText: query.get('filterText') || localStorage.getItem('filterText') || '',
 
+    // uiElements: {
+    //     [CommandType.ReverseShell]: {
+    //         listSelection: '#reverse-shell-selection',
+    //         command: '#reverse-shell-command'
+    //     },
+    //     [CommandType.BindShell]: {
+    //         listSelection: '#bind-shell-selection',
+    //         command: '#bind-shell-command',
+    //     },
+    //     [CommandType.MSFVenom]: {
+    //         listSelection: '#msfvenom-selection',
+    //         command: '#msfvenom-command'
+    //     },
+    //     [CommandType.HoaxShell]: {
+    //         listSelection: '#hoaxshell-selection',
+    //         command: '#hoaxshell-command'
+    //     }
+    // },
+
     uiElements: {
-        [CommandType.ReverseShell]: {
-            listSelection: '#reverse-shell-selection',
-            command: '#reverse-shell-command'
-        },
-        [CommandType.BindShell]: {
-            listSelection: '#bind-shell-selection',
-            command: '#bind-shell-command',
-        },
-        [CommandType.MSFVenom]: {
-            listSelection: '#msfvenom-selection',
-            command: '#msfvenom-command'
-        },
-        [CommandType.HoaxShell]: {
-            listSelection: '#hoaxshell-selection',
-            command: '#hoaxshell-command'
-        }
+        listSelection: '#shell-selection'
     },
+
+
 
     copyToClipboard: (text) => {
         if (navigator ?.clipboard ?.writeText) {
@@ -495,8 +478,12 @@ const rsg = {
           documentFragment.appendChild(container);
       });
 
-      const listSelectionSelector = rsg.uiElements[rsg.commandType].listSelection;
-      document.querySelector(listSelectionSelector).replaceChildren(documentFragment);
+    const listSelectionSelector = rsg.uiElements.listSelection;
+        const containerElement = document.querySelector(listSelectionSelector);
+        if (containerElement) {
+            containerElement.innerHTML = '';
+            containerElement.appendChild(documentFragment);
+        }
     },
 
 

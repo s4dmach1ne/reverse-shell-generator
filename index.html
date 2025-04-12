@@ -207,8 +207,8 @@
                     aria-controls="reverse" aria-selected="true">Reverse</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="bind-tab" data-toggle="tab" href="#bind" role="tab" aria-controls="bind"
-                    aria-selected="false">Bind</a>
+                <a class="nav-link" id="bind-tab" data-toggle="tab" href="#bind" role="tab"
+                    aria-controls="bind" aria-selected="false">Bind</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="msfvenom-tab" data-toggle="tab" href="#msfvenom" role="tab"
@@ -216,9 +216,10 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="hoaxshell-tab" data-toggle="tab" href="#hoaxshell" role="tab"
-                    aria-controls="msfvenom" aria-selected="false">HoaxShell</a>
+                    aria-controls="hoaxshell" aria-selected="false">HoaxShell</a>
             </li>
         </ul>
+
 
         <div class="card shadow flex-grow-1">
             <div class="card-body" style="max-height: 80px; margin-bottom: 0px; padding-bottom: 0px;">
@@ -232,22 +233,17 @@
                 </div>
             </div>
         </div>
+        
 
-        <div class="card shadow flex-grow-1">
-            <div class="card-body d-flex flex-column flex-grow-1">
-                    <!-- Reverse Shell Tab-->
-                    <div class="tab-pane active h-100" id="reverse" role="tabpanel" aria-labelledby="reverse-tab">
-                            <div class="row flex-grow-1">
-                                <div class="col-auto flex-grow-1">
-                                    <div id="reverse-shell-selection" class="list-group">
-                                        <!-- filled by init()-->
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
+        <div class="card shadow flex-grow-1 h-100">
+            <div class="card-body d-flex flex-column flex-grow-1 h-100">
+                <div id="shell-selection" class="list-group flex-grow-1 overflow-auto">
+                    <!-- Filled dynamically -->
                 </div>
             </div>
         </div>
+
+
 
     <!-- RSG data -->
     <script src="js/data.js"></script>
