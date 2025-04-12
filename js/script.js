@@ -118,7 +118,7 @@ const parsePortOrDefault = function (value, defaultPort = 9001) {
 };
 
 const rsg = {
-    ip: (query.get('ip') || localStorage.getItem('ip') || '10.10.10.10').replace(/[^a-zA-Z0-9.\-]/g, ''),
+    ip: (query.get('ip') || localStorage.getItem('ip') || '10.10.14.10').replace(/[^a-zA-Z0-9.\-]/g, ''),
     port: parsePortOrDefault(query.get('port') || localStorage.getItem('port')),
     payload: query.get('payload') || localStorage.getItem('payload') || 'windows/x64/meterpreter/reverse_tcp',
     payload: query.get('type') || localStorage.getItem('type') || 'cmd-curl',
