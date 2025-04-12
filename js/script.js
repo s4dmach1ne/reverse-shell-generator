@@ -314,10 +314,16 @@ const rsg = {
     },
 
     insertParameters: (command, encoder) => {
+        if (!command || !encoder) return '';
+        
+        let ip = encoder('{ip}');
+        let port = encoder('{port}');
+        let shell = encoder('{shell}');
+
         return command
-            .replaceAll(encoder('{ip}'), encoder(rsg.getIP()))
-            .replaceAll(encoder('{port}'), encoder(String(rsg.getPort())))
-            .replaceAll(encoder('{shell}'), encoder(rsg.getShell()))
+            .replaceAll(ip, encoder(rsg.getIP()))
+            .replaceAll(port, encoder(String(rsg.getPort())))
+            .replaceAll(shell, encoder(rsg.getShell()));
     },
 
     update: () => {
@@ -401,22 +407,15 @@ const rsg = {
           const encoding = rsg.getEncoding();
 
           if (encoding === 'Base64') {
-            // 1) First insert parameters so placeholders are replaced with actual IP/port/shell
             let inserted = rsg.insertParameters(command, text => text);
-            // 2) Base64-encode the entire command
             highlighted = btoa(inserted);
 
-            // If you prefer to show raw base64 text (no HTML inside), just do:
-            // commandPre.textContent = highlighted;
-            // return;
           } else {
-            // For encodeURL or encodeURLDouble
             function encoder(str) {
               let result = str;
               switch (encoding) {
                 case 'encodeURLDouble':
                   result = fixedEncodeURIComponent(result);
-                  // fall through
                 case 'encodeURL':
                   result = fixedEncodeURIComponent(result);
                   break;
@@ -424,17 +423,14 @@ const rsg = {
               return result;
             }
 
-            // 1) Encode the raw command text (this may still include {ip},{port},{shell})
             let encoded = encoder(command);
-            // 2) Escape HTML special chars so it doesn't break your <pre>
             let escaped = rsg.escapeHTML(encoded);
-            // 3) Insert the placeholders (with highlighting) after encoding
-            //    so your placeholders become <span> if you want them highlighted
             highlighted = rsg.insertParameters(
               rsg.highlightParameters(escaped, encoder),
               encoder
             );
           }
+
 
           if (name === 'PowerShell #3 (Base64)') {
             const encoder = (text) => text;
@@ -456,6 +452,8 @@ const rsg = {
           }
 
           // Put final text into the <pre> (for non-Base64 encoding, we have HTML markup)
+        console.log(highlighted);
+
           commandPre.innerHTML = highlighted;
 
           // Copy button: copies the plain text version (no HTML tags)
