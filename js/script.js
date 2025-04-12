@@ -388,7 +388,8 @@ const rsg = {
 
         filteredItems.forEach((item) => {
           const { name, command } = item;
-          if (!command) return;
+          // if (!command) return;
+
 
           const container = document.createElement("div");
           container.classList.add("list-group-item", "list-group-item-action");
@@ -413,6 +414,7 @@ const rsg = {
 
           // The main encoding + highlighting logic:
           let highlighted;
+
           const encoding = rsg.getEncoding();
 
           if (encoding === 'Base64') {
@@ -449,6 +451,25 @@ const rsg = {
               rsg.highlightParameters(escaped, encoder),
               encoder
             );
+          }
+
+          if (name === 'PowerShell #3 (Base64)') {
+            const encoder = (text) => text;
+            const payload = rsg.insertParameters(rsgData.specialCommands['PowerShell payload'], encoder);
+            highlighted = "powershell -e " + btoa(toBinary(payload));
+
+            function toBinary(string) {
+              const codeUnits = new Uint16Array(string.length);
+              for (let i = 0; i < codeUnits.length; i++) {
+                codeUnits[i] = string.charCodeAt(i);
+              }
+              const charCodes = new Uint8Array(codeUnits.buffer);
+              let result = '';
+              for (let i = 0; i < charCodes.byteLength; i++) {
+                result += String.fromCharCode(charCodes[i]);
+              }
+              return result;
+            }
           }
 
           // Put final text into the <pre> (for non-Base64 encoding, we have HTML markup)
