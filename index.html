@@ -218,41 +218,27 @@
                 <a class="nav-link" id="hoaxshell-tab" data-toggle="tab" href="#hoaxshell" role="tab"
                     aria-controls="msfvenom" aria-selected="false">HoaxShell</a>
             </li>
-            <!-- <li class="nav-item">
-                <a class="nav-link disabled" id="settings-tab" data-toggle="tab" href="#settings" role="tab"
-                    aria-controls="settings" aria-selected="false" aria-disabled="true">Settings</a>
-            </li> -->
         </ul>
 
-        <div class="card shadow h-100">
-            <div class="card-body d-flex flex-column" style="min-height: 600px;">
-                <!-- Top configuration bar -->
-                <div class="d-md-flex mb-3">
-                    <!---Filters-->
-
-
-                    <!---/Filters-->
-                </div>
-
+        <div class="card shadow flex-grow-1">
+            <div class="card-body" style="max-height: 90px; margin-bottom: 0px; padding-bottom: 0px;">
                 <!-- Name Search -->
-                <div class="tab-content flex-grow-1">
+                <div class="search">
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Name</span>
                         </div>
                     <input type="text" id="searchBox" placeholder="Search..." class="form-control form-control-md text-left">
                 </div>
+            </div>
+        </div>
 
-                <div class="tab-content flex-grow-1">
-                    </div>
-
-
+        <div class="card shadow flex-grow-1">
+            <div class="card-body d-flex flex-column flex-grow-1">
                     <!-- Reverse Shell Tab-->
                     <div class="tab-pane active h-100" id="reverse" role="tabpanel" aria-labelledby="reverse-tab">
                         <div class="card-text mt-4">
                             <div class="row flex-grow-1">
-
-                            <!-- Reverse shell selection -->
                                 <div class="col-auto flex-grow-1">
                                     <div id="reverse-shell-selection" class="list-group">
                                         <!-- filled by init()-->
@@ -261,7 +247,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /Reverse Shell Tab -->
                 </div>
             </div>
         </div>
