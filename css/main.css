@@ -5,6 +5,61 @@
       height: 100%;
     }
 
+    /*Scroll to Top CSS*/
+    .scroll-top {
+    position: fixed;
+    z-index: 50;
+    padding: 0;
+    right: 30px;
+    bottom: 120px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(15px);    
+    height: 56px;
+    width: 56px;
+    cursor: pointer;
+    display: flex;
+      align-items: center;
+      justify-content: center;
+    border-radius: 60%;
+    transition: all .4s ease;
+    border: none;
+    box-shadow: inset 0 0 0 1px #ccc;
+    color: #ccc;
+    background-color: #262626;
+    } 
+
+    .scroll-top.is-active {
+      opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .scroll-top .icon-tabler-arrow-up {
+        position: absolute;
+        stroke-width: 3px;
+        stroke: #ccc;
+    }
+
+    .scroll-top svg path { 
+      fill: none; 
+    }
+
+    .scroll-top svg.progress-circle path {
+      stroke: #ccc;
+      stroke-width: 5;
+          fill: none;
+        transition: all .4s ease;
+    }
+
+    .scroll-top:hover {
+        color: #a0ffa0;
+    }
+
+    .scroll-top:hover .progress-circle path, .scroll-top:hover .icon-tabler-arrow-up {
+        stroke: #a0ffa0;
+    }
+    /*END Scroll to Top CSS*/
 
     .container-fluid {
       flex: 1;
@@ -19,7 +74,6 @@
       flex-direction: column;
       min-height: 0; /* Add this */
     }
-
 
     .tab-content {
         height: 100%;
