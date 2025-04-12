@@ -90,7 +90,7 @@
     .list-group {
         display: flex;
         flex-direction: column;
-        align-self: flex-start;
+        justify-content: center;
     }
 
 
