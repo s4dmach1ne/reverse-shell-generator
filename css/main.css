@@ -116,6 +116,10 @@
       font-family: JetBrains Mono;
       text-decoration: none;
     }
+    a:hover {
+      color: white;
+      text-decoration: none;
+    }
     label {
       color: white;
       text-align: center;
